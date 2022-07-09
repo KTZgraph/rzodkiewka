@@ -127,7 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-output/cve.json
-output/cwe.json
-cve_output/
-cwe.zip
+rzodkiewka/output/
+rzodkiewka/cve_output/
+rzodkiewka/cwe.zip
