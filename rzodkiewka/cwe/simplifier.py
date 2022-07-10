@@ -7,12 +7,14 @@ from ..helpers.utils import save_dict_as_json
 class CWESimplifier:
     CWE_FILENAME = "cwe_simplified.json"
 
-    def __init__(self, cwe_downloader, output_filepath:Optional[str]=None) -> None:
+    def __init__(self, cwe_downloader, output_filepath: Optional[str] = None) -> None:
         cwe_downloader = cwe_downloader
         self.cwe_parsed = self.parse(cwe_dict=cwe_downloader.cwe)
         # remove oryginal json file
         os.remove(cwe_downloader.cwe_filepath)
-        self.cwe_output_file = self.safe_parsedd_cwe_file(self.cwe_parsed, output_filepath)
+        self.cwe_output_file = self.safe_parsedd_cwe_file(
+            self.cwe_parsed, output_filepath
+        )
 
     @property
     def cwe(self) -> dict:
@@ -22,7 +24,9 @@ class CWESimplifier:
     def cwe_filepath(self) -> str:
         return self.cwe_output_file
 
-    def safe_parsedd_cwe_file(self, cwe_data: list[dict], output_filepath:Optional[str]=None) -> None:
+    def safe_parsedd_cwe_file(
+        self, cwe_data: list[dict], output_filepath: Optional[str] = None
+    ) -> None:
         if output_filepath:
             save_dict_as_json(data=cwe_data, filename=output_filepath)
             return output_filepath

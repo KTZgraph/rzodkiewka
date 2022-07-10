@@ -3,6 +3,7 @@ from typing import Optional
 
 from ..helpers import utils
 
+
 class CWEDownloader:
     CWE_FILE_URL = "https://cwe.mitre.org/data/xml/cwec_latest.xml.zip"
     ZIP_FILENAME = "cwe_list.zip"
@@ -11,7 +12,9 @@ class CWEDownloader:
     def __init__(self, cwe_output_filepath=None) -> None:
         cwe_xml_file: str = self.download_cwe_xml_file(URL=CWEDownloader.CWE_FILE_URL)
         self.cwe_dict = self.get_cwe_dict(cwe_xml_file)
-        self._output_filepath = self.save_cwe_xml_file(self.cwe_dict, cwe_filename=cwe_output_filepath)
+        self._output_filepath = self.save_cwe_xml_file(
+            self.cwe_dict, cwe_filename=cwe_output_filepath
+        )
 
     @property
     def cwe(self) -> dict:
