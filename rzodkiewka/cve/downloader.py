@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 
-from helpers import utils
+from ..helpers import utils
 
 class CVEDownloader:
     MAIN_URL  = "https://nvd.nist.gov/vuln/data-feeds#JSON_FEED"

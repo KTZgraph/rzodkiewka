@@ -1,6 +1,6 @@
 import os
 from typing import Optional
-from helpers import utils
+from ..helpers import utils
 
 class CVEList:
     CVE_FILEPATH = "cve.json"

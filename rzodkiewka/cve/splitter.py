@@ -1,5 +1,5 @@
 import os
-from helpers.utils import get_dict_from_json_file, save_dict_as_json
+from ..helpers.utils import get_dict_from_json_file, save_dict_as_json
 
 class CVESplitter:
     def __init__(self, source_file="output/cve.json", output_dir="cve_output") -> None:

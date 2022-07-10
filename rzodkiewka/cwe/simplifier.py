@@ -1,7 +1,7 @@
 import os
 from typing import Optional
 
-from helpers.utils import save_dict_as_json
+from ..helpers.utils import save_dict_as_json
 
 
 class CWESimplifier:

@@ -1,5 +1,5 @@
 import os
-from helpers import utils
+from ..helpers import utils
 
 class CVEParser:
     def __init__(self, data) -> None:

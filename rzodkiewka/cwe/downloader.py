@@ -1,7 +1,7 @@
 import os
 from typing import Optional
 
-from helpers import utils
+from ..helpers import utils
 
 class CWEDownloader:
     CWE_FILE_URL = "https://cwe.mitre.org/data/xml/cwec_latest.xml.zip"
