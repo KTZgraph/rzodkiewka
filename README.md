@@ -159,7 +159,10 @@ if __name__ == "__main__":
 
 ```
 pip install setuptools
+pip install wheel # error: invalid command 'bdist_wheel'
 python setup.py sdist bdist_wheel
+pip install twine
+twine upload dist/*
 ```
 
 ### TODO
