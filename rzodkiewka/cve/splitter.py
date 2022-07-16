@@ -13,7 +13,7 @@ class CVESplitter:
     def get_splitted_dict(self) -> dict:
         result = {}
         for cve in self.cve_list:
-            cwe_id = cve.get("cwe_id")
+            cwe_id = cve.get("cwe_code")
             if not cwe_id in result:
                 result[cwe_id] = []
             result[cwe_id].append(cve)

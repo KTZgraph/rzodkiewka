@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
 
-VERSION = "0.0.7"
+VERSION = "0.0.8"
 DESCRIPTION = "A basic package for CWEs, CVEs download and safe simplified files."
 
 # Setting up
 setup(
     name="rzodkiewka",
     version=VERSION,
-    author="pawlaczyk, rafalwojaczek",
+    author=["pawlaczyk", "rafalwojaczek"],
     author_email="<dominika.pawlaczyk9@gmail.com>",
     description=DESCRIPTION,
     packages=find_packages(),

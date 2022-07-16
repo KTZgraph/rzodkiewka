@@ -130,3 +130,6 @@ dmypy.json
 rzodkiewka/output/
 rzodkiewka/cve_output/
 rzodkiewka/cwe.zip
+.vscode/settings.json
+cve_output/
+output/

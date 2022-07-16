@@ -52,6 +52,7 @@ class CWESimplifier:
             cwe_dict.get("Weakness_Catalog").get("Weaknesses").get("Weakness")
         )
 
+        counter = 1
         for w in weakness:
 
             try:  # mismash json
@@ -64,9 +65,12 @@ class CWESimplifier:
                     None  # some CWEs don't have Extended_Description at all
                 )
 
+            # 
+            cwe_code = f'CWE-{w["@ID"]}' if w["@ID"].isnumeric() else w["@ID"]
             result.append(
                 {
-                    "id": w["@ID"],
+                    "id": counter, # needed for dummy data in JS
+                    "code": cwe_code,
                     "name": w["@Name"],
                     "abstraction": w["@Abstraction"],
                     "structure": w["@Structure"],
@@ -75,6 +79,7 @@ class CWESimplifier:
                     "extended_description": extended_description,
                 }
             )
+            counter += 1
 
         result.append(self._get_cwe_other())
         return result

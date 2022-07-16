@@ -3,14 +3,15 @@ from ..helpers import utils
 
 
 class CVEParser:
-    def __init__(self, data) -> None:
+    def __init__(self, data:dict,  counter:int) -> None:
         self._source_data = data
         _, cwe_id = self.parse_problemtype_data()
         cve_id, published, modified, description_data = self.parse_metadata()
         self._result = {
-            "cwe_id": cwe_id,
+            "id": counter,
+            "cwe_code": cwe_id,
             "description": description_data,
-            "cve_id": cve_id,
+            "code": cve_id,
             "published": published,
             "modified": modified,
             "version": self.parse_version(),
@@ -39,9 +40,7 @@ class CVEParser:
         cve_id = self._source_data["cve"]["CVE_data_meta"]["ID"]
         published = self._source_data["publishedDate"]
         modified = self._source_data["lastModifiedDate"]
-        description_data = self._source_data["cve"]["description"]["description_data"][
-            0
-        ]["value"]
+        description_data = self._source_data["cve"]["description"]["description_data"][0]["value"]
         return cve_id, published, modified, description_data
 
     def parse_version(self):
@@ -108,21 +107,17 @@ class CVEParser:
                 "base_score": base_metric_v2["cvssV2"]["baseScore"],
             }
 
-            result["severity"] = (base_metric_v2["severity"],)
-            result["exploitability_score"] = (base_metric_v2["exploitabilityScore"],)
-            result["impact_score"] = (base_metric_v2["impactScore"],)
-            result["is_obtain_all_privilege"] = (base_metric_v2["obtainAllPrivilege"],)
-            result["is_obtain_user_privilege"] = (
-                base_metric_v2["obtainUserPrivilege"],
-            )
-            result["is_obtain_other_privilege"] = (
-                base_metric_v2["obtainOtherPrivilege"],
-            )
+            result["severity"] = base_metric_v2["severity"]
+            result["exploitability_score"] = base_metric_v2["exploitabilityScore"]
+            result["impact_score"] = base_metric_v2["impactScore"]
+            result["is_obtain_all_privilege"] = base_metric_v2["obtainAllPrivilege"]
+            result["is_obtain_user_privilege"] = base_metric_v2["obtainUserPrivilege"]
+            
+            result["is_obtain_other_privilege"] = base_metric_v2["obtainOtherPrivilege"]
+            
             # CVE-2016-0099 nie ma UserInteractionRequired
-            result["is_user_interaction_required"] = (
-                base_metric_v2.get("userInteractionRequired", None),
-            )
-
+            result["is_user_interaction_required"] = base_metric_v2.get("userInteractionRequired", None)
+            
         return result
 
     def parse_base_metric_v3(self):
@@ -163,10 +158,12 @@ class CVESimplifier:
         for filename in self._source_filename_list:
             data = utils.get_dict_from_json_file(filename)
 
+            counter = 1 #needed for dummy data in JS
             result = []
             for cve in data.get("CVE_Items"):
-                cve_parser = CVEParser(data=cve)
+                cve_parser = CVEParser(data=cve, counter=counter)
                 result.append(cve_parser.data)
+                counter+=1
 
             result_filename = f"output\simplified-{filename}"
             utils.save_dict_as_json(data=result, filename=result_filename)
