@@ -1,47 +1,56 @@
+import json
 import os
-from typing import Optional
+import requests
+import xmltodict
+import zipfile
+from typing import OrderedDict
 
-from ..helpers import utils
+from helpers.feed_manager import FeedManager
+from helpers.file_manager import FileMager
 
 
 class CWEDownloader:
-    CWE_FILE_URL = "https://cwe.mitre.org/data/xml/cwec_latest.xml.zip"
-    ZIP_FILENAME = "cwe_list.zip"
-    CWE_FILENAME = "cwe.json"
+    def __init__(self, current_working_dir: str) -> None:
+        self.source_url = FeedManager.CWE_FILE_URL
+        self.output_dir = FileMager.get_cwe_output_dir(current_working_dir)
+        if not os.path.isdir(self.output_dir):
+            os.mkdir(self.output_dir)
 
-    def __init__(self, cwe_output_filepath=None) -> None:
-        cwe_xml_file: str = self.download_cwe_xml_file(URL=CWEDownloader.CWE_FILE_URL)
-        self.cwe_dict = self.get_cwe_dict(cwe_xml_file)
-        self._output_filepath = self.save_cwe_xml_file(
-            self.cwe_dict, cwe_filename=cwe_output_filepath
-        )
+        self.output_filepath = FileMager.get_cwe_output_filepath(current_working_dir)
+        zip_filepath = self.download(URL=self.source_url)
+        xml_filepath = self.unzip(zip_filepath, self.output_dir)
+        cwe_dict = self.get_json_from_xml(xml_filepath)
 
-    @property
-    def cwe(self) -> dict:
-        return self.cwe_dict
+        # zapisywanie pliku json
+        with open(self.output_filepath, "w") as f:
+            json.dump(cwe_dict, f, indent=4)
 
-    @property
-    def cwe_filepath(self) -> dict:
-        return self._output_filepath
+        # usuwanie pliku zip
+        os.remove(zip_filepath)
+        # usuwanie pliku xml
+        os.remove(xml_filepath)
 
-    def download_cwe_xml_file(self, URL: str) -> str:
-        zip_filename = utils.download_zip_file(
-            URL=URL, filename=CWEDownloader.ZIP_FILENAME
-        )
-        extracted_file_names = utils.unzip_package(zip_filename)
+    def download(self, URL: str) -> str:
+        # tworzy nazwę pliku zip "cwec_latest.zip"
+        filename = f'{URL.split("/")[-1].split(".")[0]}.zip'
+        filepath = os.path.join(self.output_dir, filename)
 
-        os.remove(zip_filename)
-        return extracted_file_names[0]  # tylko jeden plik w zipie
+        data = requests.get(URL)
+        with open(filepath, "wb") as f:
+            f.write(data.content)
 
-    def get_cwe_dict(self, cwe_xml_file: str) -> dict:
-        cwe_dict = utils.get_dict_from_xml(xml_filename=cwe_xml_file)
-        # remove xml file
-        os.remove(cwe_xml_file)
-        return cwe_dict
-
-    def save_cwe_xml_file(
-        self, cwe_dict: dict, cwe_filename: Optional[str] = None
-    ) -> str:
-        filepath = cwe_filename if cwe_filename else CWEDownloader.CWE_FILENAME
-        utils.save_dict_as_json(data=cwe_dict, filename=filepath)
         return filepath
+
+    def unzip(self, zip_filepath: str, output_dir: str) -> str:
+        with zipfile.ZipFile(zip_filepath, "r") as zip_ref:
+            extracted_file_names = zip_ref.namelist()
+            zip_ref.extractall(output_dir)
+
+        extracted_file = extracted_file_names[0]
+        return os.path.join(output_dir, extracted_file)
+
+    def get_json_from_xml(self, src_xml_filepath: str) -> str:
+        xml_data = open(src_xml_filepath, "r", encoding="utf-8").read()
+        parsed_data: OrderedDict = xmltodict.parse(xml_data)
+        # słownik - trzeba sparsować
+        return dict(parsed_data)

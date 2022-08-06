@@ -7,3 +7,6 @@ from .utils import (
     get_files_names_from_dir,
     save_zip_file,
 )
+
+from .feed_manager import FeedManager
+from .file_manager import FileMager
