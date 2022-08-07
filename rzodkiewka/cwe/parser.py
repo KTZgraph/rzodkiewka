@@ -6,7 +6,8 @@ from helpers.file_manager import FileMager
 
 class CWEParser:
     def __init__(self, current_working_dir, src_filepath) -> None:
-        self.dst_filepath = FileMager.get_cwe_simplified_output_filepath(
+        self.output_dirpath = FileMager.get_cwe_output_dir(current_working_dir)
+        self._dst_filepath = FileMager.get_cwe_simplified_output_filepath(
             current_working_dir
         )
 
@@ -15,7 +16,7 @@ class CWEParser:
         parsed_data = self.parse(raw_data)
 
         # zapisywanie
-        with open(self.dst_filepath, "w") as f:
+        with open(self._dst_filepath, "w") as f:
             json.dump(parsed_data, f, indent=4)
 
         # usuwanie pliku

@@ -13,8 +13,6 @@ class CWEDownloader:
     def __init__(self, current_working_dir: str) -> None:
         self.source_url = FeedManager.CWE_FILE_URL
         self.output_dirpath = FileMager.get_cwe_output_dir(current_working_dir)
-        if not os.path.isdir(self.output_dirpath):
-            os.mkdir(self.output_dirpath)
 
         self.output_filepath = FileMager.get_cwe_output_filepath(current_working_dir)
         zip_filepath = self.download(self.source_url, self.output_dirpath)

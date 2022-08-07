@@ -13,9 +13,6 @@ class CVEDownloader:
         self.base_url = FeedManager.CVE_BASE_URL
         self.output_dirpath = FileMager.get_cve_output_dirpath(current_working_dir)
 
-        if not os.path.isdir(self.output_dirpath):
-            os.mkdir(self.output_dirpath)
-
         source_file_links = self.scrape_file_links(self.feed_url, self.base_url)
         self.filepaths = self.download(source_file_links)
 
@@ -63,6 +60,7 @@ class CVEDownloader:
             os.remove(zip_filepath)
 
             # dodanie ścieżki rozpakowanego pliku do listy
-            filename_list.append(extracted_file_name)
+            extracted_filepath = os.path.join(self.output_dirpath, extracted_file_name)
+            filename_list.append(extracted_filepath)
 
         return filename_list
