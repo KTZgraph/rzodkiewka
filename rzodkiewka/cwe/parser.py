@@ -2,17 +2,16 @@ import json
 import os
 
 from helpers.file_manager import FileMager
-from helpers.utils import get_dict_from_json_file
 
 
 class CWEParser:
-    # TODO dodanie CWE których nie ma
-    # FIXME CamleCase
     def __init__(self, current_working_dir, src_filepath) -> None:
         self.dst_filepath = FileMager.get_cwe_simplified_output_filepath(
             current_working_dir
         )
-        raw_data: dict = get_dict_from_json_file(src_filepath)
+
+        with open(src_filepath, "r", encoding="utf-8") as f:
+            raw_data = json.loads(f.read())
         parsed_data = self.parse(raw_data)
 
         # zapisywanie
@@ -20,7 +19,7 @@ class CWEParser:
             json.dump(parsed_data, f, indent=4)
 
         # usuwanie pliku
-        # os.remove(src_filepath)
+        os.remove(src_filepath)
 
     def parse(self, raw_data: dict) -> dict:
         result = []
