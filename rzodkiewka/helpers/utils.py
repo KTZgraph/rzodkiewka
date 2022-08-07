@@ -6,8 +6,8 @@ import os
 from typing import OrderedDict, Optional
 
 
-def save_dict_as_json(data: dict, filename: str) -> None:
-    with open(filename, "w") as f:
+def save_dict_as_json(data: dict, filepath: str) -> None:
+    with open(filepath, "w") as f:
         json.dump(data, f, indent=4)
 
 

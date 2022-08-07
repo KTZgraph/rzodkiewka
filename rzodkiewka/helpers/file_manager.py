@@ -5,6 +5,7 @@ class FileMager:
     CWE_FILENAME = "cwe.json"
     CWE_OUTPUT_DIR_NAME = "output_cwe"
     CWE_OUTPUT_FILENAME_NAME = "cwe.json"
+    CWE_SIMPLIFIED_OUTPUT_FILENAME_NAME = "cwe_simplified.json"
     CVE_OUTPUT_DIR_NAME = "output_cve"
 
     @staticmethod
@@ -27,4 +28,12 @@ class FileMager:
             current_working_dir,
             FileMager.CWE_OUTPUT_DIR_NAME,
             FileMager.CWE_OUTPUT_FILENAME_NAME,
+        )
+
+    @staticmethod
+    def get_cwe_simplified_output_filepath(current_working_dir: str) -> str:
+        return os.path.join(
+            current_working_dir,
+            FileMager.CWE_OUTPUT_DIR_NAME,
+            FileMager.CWE_SIMPLIFIED_OUTPUT_FILENAME_NAME,
         )
