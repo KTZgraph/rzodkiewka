@@ -19,8 +19,11 @@ class FileMager:
         return os.path.join(current_working_dir, FileMager.CVE_OUTPUT_DIR_NAME)
 
     @staticmethod
-    def get_cve_output_filename(cwe_code: str) -> str:
-        return f"{cwe_code}.json"
+    def get_cve_output_filename(current_working_dir: str, cwe_code: str) -> str:
+        dirname = f"{str(cwe_code)}.json"
+        return os.path.join(
+            current_working_dir, FileMager.GENERAL_OUTPUT_DIRNAME, dirname
+        )
 
     @staticmethod
     def get_cve_simplified_filepath(current_working_dir: str) -> str:

@@ -4,6 +4,7 @@ from cwe.downloader import CWEDownloader
 from cwe.parser import CWEParser
 from cve.downloader import CVEDownloader
 from cve.simplifier import CVESimplifier
+from cve.splitter import CVESplitter
 
 
 def save_info():
@@ -14,9 +15,13 @@ def save_info():
     cve_downloader = CVEDownloader(current_working_dir)
     raw_cve_filepath_list = cve_downloader.filepaths
     raw_cve_dirpath = cve_downloader.output_dirpath
-
     # zapisuje pliki
-    CVESimplifier(current_working_dir, raw_cve_filepath_list)
+    cve_simplifier = CVESimplifier(current_working_dir, raw_cve_filepath_list)
+    cve_filepath = cve_simplifier.cve_simplified_filepath
+
+    # podzielenie plików ze względu na CWE
+    cve_filepath_list = CVESplitter(current_working_dir, cve_filepath).cve_filepath_list
+    print(cve_filepath_list)
 
     # usuwanie folderu "output_cwe"
     os.rmdir(tmp_cwe_dirpath)
