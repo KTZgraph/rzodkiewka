@@ -157,17 +157,17 @@ class CVESimplifier:
         self.cve_simplified_filepath = FileMager.get_cve_simplified_filepath(
             current_working_dir
         )
-        self.cve_list = self.save_simplified_cves(src_filepath_list)
+        self.cve_list = self.get_simplified_cves(src_filepath_list)
 
-        with open(self.cve_simplified_filepath, "w") as f:
+        with open(self.cve_simplified_filepath, "w", encoding="utf-8") as f:
             json.dump(self.cve_list, f, indent=4)
 
-    def save_simplified_cves(self, src_filepath_list: list[str]) -> list[str]:
+    def get_simplified_cves(self, src_filepath_list: list[str]) -> list[str]:
         output_data_list = []
 
         for filepath in src_filepath_list:
             # 1. odczytuję plik json z podatnosciami CVE
-            with open(filepath, "r", encoding="utf-8") as f:
+            with open(filepath, "r") as f:
                 data = json.loads(f.read())
 
             # licznik do sztucznego id
