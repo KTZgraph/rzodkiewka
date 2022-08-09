@@ -16,7 +16,7 @@ class CWEParser:
         parsed_data = self.parse(raw_data)
 
         # zapisywanie
-        with open(self._dst_filepath, "w") as f:
+        with open(self._dst_filepath, "w", encoding="utf-8") as f:
             json.dump(parsed_data, f, indent=4)
 
         # usuwanie pliku

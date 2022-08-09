@@ -167,7 +167,7 @@ class CVESimplifier:
 
         for filepath in src_filepath_list:
             # 1. odczytuję plik json z podatnosciami CVE
-            with open(filepath, "r") as f:
+            with open(filepath, "r", encoding="utf-8") as f:
                 data = json.loads(f.read())
 
             # licznik do sztucznego id

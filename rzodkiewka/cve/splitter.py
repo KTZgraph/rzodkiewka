@@ -32,7 +32,7 @@ class CVESplitter:
             dst_filepath = FileMager.get_cve_output_filename(
                 current_working_dir, cwe_id
             )
-            with open(dst_filepath, "w") as f:
+            with open(dst_filepath, "w", encoding="utf-8") as f:
                 json.dump(cve_splitted_by_cwe[cwe_id], f, indent=4)
 
             cve_filepath_list.append(dst_filepath)

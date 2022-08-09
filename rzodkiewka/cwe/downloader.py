@@ -20,7 +20,7 @@ class CWEDownloader:
         cwe_dict = self.get_json_from_xml(xml_filepath)
 
         # zapisywanie pliku json
-        with open(self.output_filepath, "w") as f:
+        with open(self.output_filepath, "w", encoding="utf-8") as f:
             json.dump(cwe_dict, f, indent=4)
 
         # usuwanie pliku zip
